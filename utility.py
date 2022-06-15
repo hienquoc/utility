@@ -4,6 +4,7 @@ import sys
 # numpy.set_printoptions(threshold=sys.maxsize) # Uncomment to print full matrix
 '''
 Example on how to print dictionary to debug.txt file
+from utility.utility import Utility
 debug = Utility(custom_ident_number=1)
 debug_variable_dictionary = {'loop_number: loop_number,     # Print the loop number in while loops
                              'cap': cap,
