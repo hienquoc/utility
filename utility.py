@@ -20,13 +20,15 @@ class Utility:
                  custom_file_name='debug.txt',
                  custom_ident_number=0,
                  custom_title='No Title Set',
-                 custom_turn_on_debug=True):
+                 custom_turn_on_debug=True,
+                 custom_debug_variable_dictionary={}):
 
         self.file_name = custom_file_name       # Get the file name
         self.indent_number = custom_ident_number        # Get the indentation number
         self.tab = self.get_number_of_tabs_as_string()      # Initialize and get the number of tabs
         self.title = custom_title       # Format the title in get_title() method
         self.turn_on_debug = custom_turn_on_debug
+        self.debug_variable_dictionary = custom_debug_variable_dictionary
 
     #   Set option to print full numpy matrix
     def set_option_print_all_matrix(self):
@@ -48,9 +50,9 @@ class Utility:
         new_line = '\n'     # Start a new line to separate each function
         with open(self.file_name, 'a') as text_file:  # 'a' to append to end of file with text_file object
             text_file.write(f"{new_line}{self.tab}{datetime.datetime.now()} {self.title}{new_line}")    # Print Title
-            for key in debug_dictionary:        # Loop through each key iin debug_dictionary
+            for key in self.debug_variable_dictionary:        # Loop through each key iin debug_dictionary
                 # print(datetime.datetime.now(), key, +' = ', debug_dictionary[key])
-                text_file.write(f"{self.tab}{datetime.datetime.now()} {key} = {debug_dictionary[key]}{new_line}")       # Print key name and value
+                text_file.write(f"{self.tab}{datetime.datetime.now()} {key} = {self.debug_variable_dictionary[key]}{new_line}")       # Print key name and value
 
     def check_global_utility_debug_status_before_printing_value_dictionary(selfs, debug_dictionary):
         if utility_debug_status == True:
