@@ -1,6 +1,6 @@
 import datetime
-import numpy
 import sys
+import os
 # numpy.set_printoptions(threshold=sys.maxsize) # Uncomment to print full matrix
 '''
 Example on how to print dictionary to debug.txt file
@@ -46,7 +46,7 @@ class Utility:
             tab += str('\t')        # Add the number of tabs base on the indent
         return tab  # Return the tab string to print
 
-    def print_value_dictionary(self, debug_dictionary):
+    def print_value_dictionary(self):
         new_line = '\n'     # Start a new line to separate each function
         with open(self.file_name, 'a') as text_file:  # 'a' to append to end of file with text_file object
             text_file.write(f"{new_line}{self.tab}{datetime.datetime.now()} {self.title}{new_line}")    # Print Title
@@ -54,6 +54,11 @@ class Utility:
                 # print(datetime.datetime.now(), key, +' = ', debug_dictionary[key])
                 text_file.write(f"{self.tab}{datetime.datetime.now()} {key} = {self.debug_variable_dictionary[key]}{new_line}")       # Print key name and value
 
-    def check_global_utility_debug_status_before_printing_value_dictionary(selfs, debug_dictionary):
+    def check_global_utility_debug_status_before_printing_value_dictionary(self):
         if utility_debug_status == True:
+            self.print_value_dictionary(self.debug_variable_dictionary)
             return True
+
+    def get_local_file_path(self):
+        file_path = os.path.abspath(os.getcwd())
+        return file_path
