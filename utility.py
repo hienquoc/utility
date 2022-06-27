@@ -54,6 +54,13 @@ class Utility:
                 # print(datetime.datetime.now(), key, +' = ', debug_dictionary[key])
                 text_file.write(f"{self.tab}{datetime.datetime.now()} {key} = {self.debug_variable_dictionary[key]}{new_line}")       # Print key name and value
 
+    def print_value_dictionary_to_screen(self):     # Method to print to screen when file can't be saved
+        new_line = '\n'  # Start a new line to separate each function
+        print(f"{new_line}{self.tab}{datetime.datetime.now()} {self.title}{new_line}")  # Print Title
+        for key in self.debug_variable_dictionary:  # Loop through each key iin debug_dictionary
+            # print(datetime.datetime.now(), key, +' = ', debug_dictionary[key])
+            print(f"{self.tab}{datetime.datetime.now()} {key} = {self.debug_variable_dictionary[key]}{new_line}")  # Print key name and value
+
     def check_global_utility_debug_status_before_printing_value_dictionary(self):
         if utility_debug_status == True:
             self.print_value_dictionary(self.debug_variable_dictionary)
