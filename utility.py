@@ -62,3 +62,10 @@ class Utility:
     def get_local_file_path(self):
         file_path = os.path.abspath(os.getcwd())
         return file_path
+
+    def get_relative_import_file_path(self):
+        import sys
+        import os
+
+        s_path_program = os.path.dirname(__file__)
+        sys.path.append(s_path_program + '../../')
