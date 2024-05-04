@@ -15,7 +15,7 @@ debug.print_value_dictionary(debug_variable_dictionary)
 global utility_debug_status
 
 
-class Utility:
+class utility_class:
     def __init__(self,
                  custom_file_name='debug.txt',
                  custom_ident_number=0,
