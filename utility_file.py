@@ -1,6 +1,7 @@
 import datetime
 import sys
 import os
+import pickle
 # numpy.set_printoptions(threshold=sys.maxsize) # Uncomment to print full matrix
 '''
 Example on how to print dictionary to debug.txt file
@@ -12,67 +13,57 @@ debug_variable_dictionary = {'loop_number: loop_number,     # Print the loop num
                              'frame': frame}
 debug.print_value_dictionary(debug_variable_dictionary)
 '''
-global utility_debug_status
-
-
 class utility_class:
-    def __init__(self,
-                 custom_file_name='debug.txt',
-                 custom_ident_number=0,
-                 custom_title='No Title Set',
-                 custom_turn_on_debug=True,
-                 custom_debug_variable_dictionary={}):
-
-        self.file_name = custom_file_name       # Get the file name
-        self.indent_number = custom_ident_number        # Get the indentation number
-        self.tab = self.get_number_of_tabs_as_string()      # Initialize and get the number of tabs
-        self.title = custom_title       # Format the title in get_title() method
-        self.turn_on_debug = custom_turn_on_debug
-        self.debug_variable_dictionary = custom_debug_variable_dictionary
-
+    def __init__(self):
+        pass
     #   Set option to print full numpy matrix
-    def set_option_print_all_matrix(self):
-        numpy.set_printoptions(threshold=sys.maxsize)
+    @classmethod
+    def utility_save_list_of_objects_to_file(cls, inputs):
+        ri = {
+            "full_path_file_name": None,
+            "object_list": [],
+        }
+        ri.update(inputs)
+        # Let's assume you have a list of objects you want to save
+        my_objects = ri['object_list']  # Replace these with your actual objects
 
-    #   Set option to print summarized matrix option
-    def set_option_print_summarized_matrix(self):
-        numpy.set_printoptions(threshold=1000)
+        # Specify your filename
+        filename = ri['full_path_file_name']
 
-    #   Gets the number of tabs as a string to print in debug. Set new tab attribute and run this to print
-    #   nested loops with
-    def get_number_of_tabs_as_string(self):
-        tab = ""    # Initialize tab variable as empy string
-        for index in range(self.indent_number):     # Loop the number of indents and create tab string
-            tab += str('\t')        # Add the number of tabs base on the indent
-        return tab  # Return the tab string to print
+        # Open a file in binary write mode and use pickle to dump the list of objects
+        try:
+            if filename is None:
+                raise ValueError("Filename cannot be None.")
+            with open(filename, 'wb') as file:
+                pickle.dump(my_objects, file)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+    @classmethod
+    def utility_load_list_of_objects_from_file(cls, inputs):
+        ri = {
+            "full_path_file_name": None,
+        }
+        ri.update(inputs)
 
-    def print_value_dictionary(self):
-        new_line = '\n'     # Start a new line to separate each function
-        with open(self.file_name, 'a') as text_file:  # 'a' to append to end of file with text_file object
-            text_file.write(f"{new_line}{self.tab}{datetime.datetime.now()} {self.title}{new_line}")    # Print Title
-            for key in self.debug_variable_dictionary:        # Loop through each key iin debug_dictionary
-                # print(datetime.datetime.now(), key, +' = ', debug_dictionary[key])
-                text_file.write(f"{self.tab}{datetime.datetime.now()} {key} = {self.debug_variable_dictionary[key]}{new_line}")       # Print key name and value
+        # Specify your filename (must be the same as the one used for saving)
+        filename = ri['full_path_file_name']
 
-    def print_value_dictionary_to_screen(self):     # Method to print to screen when file can't be saved
-        new_line = '\n'  # Start a new line to separate each function
-        print(f"{new_line}{self.tab}{datetime.datetime.now()} {self.title}{new_line}")  # Print Title
-        for key in self.debug_variable_dictionary:  # Loop through each key iin debug_dictionary
-            # print(datetime.datetime.now(), key, +' = ', debug_dictionary[key])
-            print(f"{self.tab}{datetime.datetime.now()} {key} = {self.debug_variable_dictionary[key]}{new_line}")  # Print key name and value
+        try:
+            with open(filename, 'rb') as file:
+                loaded_objects = pickle.load(file)
+                print('Successfully loaded objects:')
+                print(loaded_objects)
+        except EOFError:
+            # File exists but is empty
+            print('File is empty, returning an empty list.')
+            loaded_objects = []  # Return an empty list if the file is empty
+        except FileNotFoundError:
+            # Handle case where file does not exist
+            print('File not found, returning an empty list.')
+            loaded_objects = []
+        except Exception as e:
+            # Handle other potential exceptions
+            print(f'An error occurred: {e}')
+            loaded_objects = []
 
-    def check_global_utility_debug_status_before_printing_value_dictionary(self):
-        if utility_debug_status == True:
-            self.print_value_dictionary(self.debug_variable_dictionary)
-            return True
-
-    def get_local_file_path(self):
-        file_path = os.path.abspath(os.getcwd())
-        return file_path
-
-    def get_relative_import_file_path(self):
-        import sys
-        import os
-
-        s_path_program = os.path.dirname(__file__)
-        sys.path.append(s_path_program + '../../')
+        return loaded_objects
